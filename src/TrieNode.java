@@ -1,5 +1,3 @@
-//import java.util.HashMap;
-//import java.util.Set;
 
 public class TrieNode {
     public String w;
@@ -11,7 +9,16 @@ public class TrieNode {
         w = "testing";
         end = false;
     }
-    //public String getWord() {return word;}
-    //public void setWord(String w) {word = w;}
 
+    public boolean startsWith(String prefix) {
+
+        for(char c: prefix.toCharArray()) {
+            if(chars[c-'a'] == null) {
+                return false;
+            }
+            return startsWith(prefix.substring(1));
+        }
+
+        return true;
+    }
 }

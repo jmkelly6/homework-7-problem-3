@@ -5,8 +5,6 @@ public interface AutocompleteTrie {
 
     boolean search(String word);
 
-    boolean startsWith(String prefix);
-
-    //TrieNode searchNode(String s);
+    List<String> autocomplete(String word);
 
 }

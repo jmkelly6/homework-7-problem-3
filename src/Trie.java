@@ -23,7 +23,6 @@ public class Trie implements AutocompleteTrie{
             p = p.chars[index];
         }
         p.w = word;
-        //System.out.println("This is the word: " + p.w);
         p.end = true;
     }
 
@@ -49,26 +48,21 @@ public class Trie implements AutocompleteTrie{
             return false;
         }
     }
-    public boolean startsWith(String prefix) {
-        TrieNode node = root;
-
-        for(char c: prefix.toCharArray()) {
-            if(node.chars[c-'a'] == null) {
-                return false;
-            }
-            node = node.chars[c-'a'];
-        }
-
-        return true;
-    }
 
     public List<String> autocomplete(String word) {
         List<String> auto = new ArrayList<>();
-        TrieNode node = root;
+        TrieNode p = root;
+
+        if(word == null) {
+            return null;
+        }
 
         if(search(word)) {
-            search(word);
+            if(p.startsWith(word)) {
+                auto.add(p.w);
+            }
         }
+        return auto;
     }
 
 
@@ -77,9 +71,16 @@ public class Trie implements AutocompleteTrie{
     public String toString() {
         String ans = "";
         int i = 0;
+        TrieNode p = root;
 
-        while(root.end) {
-            ans += root.chars[i].w;
+        if(p == null) {
+            return null;
+        }
+
+        while(!p.end) {
+            if(p.chars[i].w != null) {
+                ans += p.chars[i].w;
+            }
             i++;
         }
 
