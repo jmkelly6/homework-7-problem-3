@@ -1,3 +1,5 @@
+import java.util.List;
+
 public interface AutocompleteTrie {
     void insertWord(String word);
 

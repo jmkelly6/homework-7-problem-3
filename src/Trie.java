@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Trie implements AutocompleteTrie{
     public TrieNode root;
 
@@ -8,90 +11,78 @@ public class Trie implements AutocompleteTrie{
     public void insertWord(String word) {
         TrieNode p = root;
         word.toLowerCase();
-        for(int i = 0; i < word.length(); i++){
+
+        for(int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
             int index = c - 'a';
-            if(p.chars[index] == null){
+
+            if(p.chars[index] == null) {
                 p.chars[index] = new TrieNode();
             }
+
             p = p.chars[index];
         }
         p.w = word;
+        //System.out.println("This is the word: " + p.w);
         p.end = true;
     }
 
     public boolean search(String word) {
-        TrieNode node = root;
-        for(char c: word.toCharArray()) {
-            if(node.chars[c-'a'] == null)
-                return false;
-            node = node.chars[c-'a'];
-        }
-        if(node.w.equals(word)) {
+        return search(root, word, 0);
+    }
+
+    public boolean search(TrieNode p, String word, int front) {
+        if(p.end && front == word.length()) {
             return true;
+        }
+
+        if(front >= word.length()) {
+            return false;
+        }
+
+        char c = word.charAt(front);
+        int index = c - 'a';
+
+        if(p.chars[index] != null) {
+            return search(p.chars[index], word, front + 1);
         } else {
             return false;
         }
-//        TrieNode p = searchNode(word);
-//        if(p == null){
-//            return false;
-//        } else {
-//            if(p.end)
-//                return true;
-//        }
-//        return false;
     }
-
     public boolean startsWith(String prefix) {
         TrieNode node = root;
-        for(char c: prefix.toCharArray()){
-            if(node.chars[c-'a']==null)
+
+        for(char c: prefix.toCharArray()) {
+            if(node.chars[c-'a'] == null) {
                 return false;
+            }
             node = node.chars[c-'a'];
         }
+
         return true;
-
-
-//        TrieNode p = searchNode(prefix);
-//        if(p == null) {
-//            return false;
-//        } else {
-//            return true;
-//        }
     }
 
-//    public boolean searchNode(String s){
-//        TrieNode node = root;
-//        for(char c: s.toCharArray()){
-//            if(node.chars[c-'a']==null)
-//                return false;
-//            node = node.chars[c-'a'];
-//        }
-//        return true;
-//        TrieNode p = root;
-//        for(int i = 0; i < s.length(); i++){
-//            char c = s.charAt(i);
-//            int index = c-'a';
-//            if(p.chars[index]!=null){
-//                p = p.chars[index];
-//            } else {
-//                return null;
-//            }
-//        }
-//        if(p == root) {
-//            return null;
-//        }
-//        return p;
-//    }
+    public List<String> autocomplete(String word) {
+        List<String> auto = new ArrayList<>();
+        TrieNode node = root;
 
+        if(search(word)) {
+            search(word);
+        }
+    }
+
+
+    // toString method used for debugging tests
     @Override
     public String toString() {
         String ans = "";
         int i = 0;
+
         while(root.end) {
-            ans += root.chars[i];
+            ans += root.chars[i].w;
             i++;
         }
+
         return ans;
     }
 }
